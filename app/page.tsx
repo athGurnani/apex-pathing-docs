@@ -7,49 +7,27 @@ import { BackgroundBeams } from "@/components/background-beams";
 
 export default function Home() {
   return (
-    <div className="flex flex-col w-full items-center justify-center min-h-[calc(100vh-var(--nextra-navbar-height,4rem)-8rem)] py-12 px-6 text-center relative overflow-hidden">
-      <div className="max-w-3xl z-10 relative flex flex-col items-center">
-        <Image
-          src={logo_icon}
-          alt="Apex Pathing Logo"
-          width={280}
-          height={280}
-          className="w-56 h-56 sm:w-72 sm:h-72 mb-2 mx-auto"
-          priority
-        />
+    <div className="flex flex-col w-full items-center justify-center h-[calc(100vh-var(--nextra-navbar-height,4rem)-var(--nextra-banner-height,2.5rem)-3.8rem)] px-6 text-center relative">
 
-        <h1 className="text-4xl sm:text-5xl tracking-tight font-bold mb-4 text-foreground">
+      <div className="max-w-3xl mt-16 z-10 relative">
+        <Image src={logo_icon} alt="Apex Pathing Logo" width={256} height={256} className="w-64 h-64 mb-6 mx-auto" />
+        <h1 className="text-4xl sm:text-5xl tracking-tight font-bold mb-5">
           Apex Pathing
         </h1>
-
-        <p className="text-base sm:text-lg mb-2 leading-relaxed font-semibold tracking-wide text-[#cc0000]">
-          Path your way to the peaks!
+        <p className="text-xl text-accent-text mb-9 leading-relaxed">
+          Path your way to the peaks
         </p>
 
-        <div className="w-80 max-w-md h-[1px] bg-[#cc0000]/40 mb-5 rounded-full"></div>
-
-        <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="/docs/about"
-            className="px-8 py-3 rounded-full bg-brand-primary text-white font-semibold hover:bg-brand-primary-hover transition-all"
-          >
+        <div className="flex flex-wrap justify-center gap-4 mb-20">
+          <a href="/docs/about" className="px-8 py-3 rounded-full bg-brand-primary text-foreground font-medium hover:bg-brand-primary-hover transition-all">
             Get Started
           </a>
-
-          <a
-            href="https://github.com/ApexPathing/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-3 rounded-full bg-brand-accent text-white font-semibold hover:bg-brand-accent-hover transition-all border border-red-900"
-          >
+          <a href="https://github.com/ApexPathing/" target="_blank" className="px-8 py-3 rounded-full transition-all bg-brand-accent hover:bg-brand-accent-hover">
             GitHub
           </a>
         </div>
       </div>
-
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <BackgroundBeams />
-      </div>
+      <BackgroundBeams />
     </div>
   )
 }
