@@ -10,9 +10,9 @@ arm mechanisms, and more. PID controllers are versatile, however they aren't ver
 
 ## Overview
 A PID controller consists of three terms:
-* **Proportional**: Multiplied by the current positional error in inches. This term is responsible for the majorit of the robot's movement.
+* **Proportional**: Multiplied by the current positional error in inches. This term is responsible for the majority of the robot's movement.
 * **Integral**: Multiplied by the sum of all previous errors. This term helps to reduce steady state error, which is the error that can occur when the robot is close to the target position, but it isn't quite there yet. 
-* **Derivative**: Multiplied by the change in error since the last update. Helps to reduce oscilation.
+* **Derivative**: Multiplied by the change in error since the last update. Helps to reduce oscillation.
 <Callout type= "info">
 Sometimes, people choose to add a feedforward term to a PID controller, which helps to reduce static friction in a robot.
 It also helps to counteract the effects of inertia.
@@ -20,8 +20,8 @@ It also helps to counteract the effects of inertia.
 
 ## Tuning a PID controller
 When tuning a PID controller manually, it's generally good advice to begin with the P term. Start at maybe 0.0001 and increase it very gradually until you are reaching just below your taget position. You don't want to overshoot.
-If your robot is oscillating around the target position, you can try adding some D to reduce that oscilation. The D term is generally very small, and should be tuned very carefully, as too much of the D term can cause the response of the 
-controller to be slow and it can also cause osciliation if you make it too big. Generally use very little of the D term.
+If your robot is oscillating around the target position, you can try adding some D to reduce that oscillation. The D term is generally very small, and should be tuned very carefully, as too much of the D term can cause the response of the
+controller to be slow and it can also cause oscillation if you make it too big. Generally use very little of the D term.
 The I term is generally not used in path following, but in other cases, it can be used to increase the accuracy of your controller.
 
 <Callout type= "warning">
