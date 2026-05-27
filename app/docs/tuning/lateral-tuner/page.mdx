@@ -32,7 +32,10 @@ results.
 ### Apply the values
 Open the constants file and update the lateral coefficients with the values obtained from tuning.
 ```java
-.setStrafeCoeffs(new PDFLCoefficients(p, d, l))
+//Replace with your actual values
+.setStrafeCoeffs(new PDSController.PDSCoefficients(0.0, 0.0, 0.0, 0.0))
+.setStrafeTolerance(Distance.fromIn(1.5)
+.setMaxStrafePower(1)
 ```
 </Steps>
 

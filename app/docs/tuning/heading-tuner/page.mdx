@@ -23,7 +23,10 @@ results.
 ### Apply the values
 Open the constants file and update the heading coefficients with the values obtained from tuning.
 ```java
-.setHeadingCoeffs(new PDFLCoefficients(p, d, l))
+//Replace with your actual values
+.setHeadingCoeffs(new PDSController.PDSCoefficients(0.0, 0.0, 0.0, 0.0))
+.setHeadingTolerance(Angle.fromDeg(2.0))
+.setMaxTurnPower(1)
 ```
 </Steps>
 
