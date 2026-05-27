@@ -94,15 +94,12 @@ You should be able to drive the robot like a normal TeleOp OpMode.
 
 ### Troubleshooting
 If your robot isn't behaving as expected, here are some common issues to check for:
-## Controls are backwards or inverted
-* Make sure your motor reversals are correct in the constants file
 
-## X or Y going the wrong way
-* Reverse the corresponding odometry direction in the constants file
-
-##X and Y are swapped
-* Reverse the X and Y odometry directions in the constants file
-
+| Issue | Resolution |
+| --- | --- |
+| **Controls are backwards or inverted** | Verify and correct your motor reversal settings (`setFrontRightReversed`, `setBackRightReversed`, etc.). |
+| **X or Y position going the wrong way** | Reverse the corresponding odometry pod direction using `setXPodDirection` or `setYPodDirection`. |
+| **X and Y axes are swapped** | Reverse the X and Y odometry directions (or check encoder port/direction assignments). |
 
 ## Tuning
 The last step before being able to run your first path is tuning the follower constants. This entire process will be
