@@ -4,11 +4,11 @@
 ## Cubic Functions
 
 * At its core, B-Splines are cubic functions, a function with a degree of 3.
-For example, a simple linear equation: $f(x)=\ mx+b$ has a degree of 1, 
+For example, a simple linear equation: $f(x)= mx+b$ has a degree of 1, 
 because the highest power in the equation, is 1. 
-* A quadratic: $f(x)=\ Ax^2+Bx+C$ has a degree of 2.
+* A quadratic: $f(x)= Ax^2+Bx+C$ has a degree of 2.
 When increasing the degree,the base equation just gets a new coefficient and degree.
-For example, a quintic equation would be $f(x) =\ Ax^5 + Bx^4 + Cx^3 + Dx^2 + Ex + F$
+For example, a quintic equation would be $f(x) = Ax^5 + Bx^4 + Cx^3 + Dx^2 + Ex + F$
 * Let's substitute $x$ as $t$, the time it takes between the beginning and end of a curve, usually
 expressed as $t \in [0,1]$ which basically means that all curves happen on a range from 0 to 1.
 * This means that any t value that is plugged into the equation, for example $t = 0.6$, will give
@@ -27,9 +27,9 @@ of $x$, it does directly correspond to the X-Axis.
 * Unfortunately, simply creating a function passing through both vectors runs into the same issue.
 * This is where 2D curves come in. Imagine that each $x$ and $y$ value of a function relates to another function.
 This allows you to model 2 functions, one for $x$ and one for $y$.
-* As a result, the functino doesn't pass through 2 points on the same $x$ value, but passes through one point on the $x$ function
+* As a result, the function doesn't pass through 2 points on the same $x$ value, but passes through one point on the $x$ function
 and 2 on the $y$ function.
-* This can be modeled as $(x:f(t),y:g(t))$ where $f(t)$ is the x function, and $g(t)$ is the y function.
+* This can be modeled as $(x:f(t),y:g(t))$ where $f(t)$ is the $x$ function, and $g(t)$ is the $y$ function.
 * Imagine a coordinate plane where the $x$ axis is represented as $t$ and the $y$ axis is represented by $x$. This is the $x$ function's 'space'
 * In the 'space', the coordinates from earlier could be written as $(0.2,5)$ and $(0.4,5)$, following the scheme of $(t,x)$.
 * Similarly, the coordinates on the $y$ function's 'space' would be $(0.2,5)$ and $(0.4,10)$. Each function can be solved by **interpolation** (more on that later),
@@ -45,6 +45,97 @@ are connected, and the second derivatives, or the derivatives of the derivatives
 * This translates to exceptionally smooth pathing without any sudden jerks, and enables efficient computing.
 * B-Splines are $G_1$ continuous, meaning that the curvature is continuous. This essentially
 means that the robot won't experience any acceleration jumps while traveling the path.
-* Similar to Bezier Curves, B-Splines do not interpolate **ANY** control points. As a result, B-Splines do not pass through
+* Similar to Bezier Curves(not exactly like), B-Splines do not interpolate **ANY** control points. As a result, B-Splines do not pass through
 any of the specified control points, as only the endpoints are interpolated. However, we devised a way to get around this
 using a clever mathematical concept.
+* B-Splines have complete local control. This means that adjusting a control point will only
+affect a small part of the curve, and not the whole thing. For example, adjusting a control point
+near one of the spline's endpoints will not change anything near the other endpoint.
+
+
+## B-Spline Math
+
+How do we actually form a B Spline? Let's first talk about the matrix form of a function.
+
+The matrix form of a function is defined as $f(t) = T*C*P$ where $T$, $C$, and $P$ are all matrices
+representing the function's polynomial form. T is a matrix $\begin{bmatrix}1 & t & t^2 & t^3 \end{bmatrix}$
+ that represent the
+$T$ value in the polynomial. The $C$ matrix, or Characteristic matrix is the thing that defines the
+curve. Which looks like: 
+
+$\begin{bmatrix}
+   c_0 & c_1 & c_2 & c_3 \\
+   c_4 & c_5 & c_6  & c_7 \\
+   c_8 & c_9 & c_{10} & c_{11} \\
+   c_{12} & c_{13} & c_{14} & c_{15} \\
+\end{bmatrix}$
+
+This matrix is constant based on the type of spline you are using. For example. All cubic bezier curves will
+have the same $C$ matrix, but a B-Spline will have a different one for all types of B-Splines.
+Lastly, we have the $P$, the point matrix. This is expressed as:
+
+$\begin{bmatrix}
+    P_0\\
+    P_1\\
+    P_2 \\
+    P_3 \\
+\end{bmatrix}$
+
+Now, let's put the values into the $C$ matrix and put it all together!
+
+$f(t) =$
+$\begin{bmatrix}1 & t & t^2 & t^3 \end{bmatrix}$
+$\begin{bmatrix}
+   1 & 4 & 1 & 0 \\
+   -3 & 0 & 3  & 0 \\
+   3 & -6 & 3 & 0 \\
+   -1 & 3 & -3 & 1 \\
+\end{bmatrix}$
+$\begin{bmatrix}
+    P_0\\
+    P_1\\
+    P_2 \\
+    P_3 \\
+\end{bmatrix}$
+
+So... now that we have the matrix form, what does it do? We can use matrix multiplication to turn the
+matrices into a polynomial. Let's look at the polynomial coefficient form. This is where we express
+the matrix in terms of $t$, using the $P$ matrix as coefficients. First, lets express the $P$
+matrix like this:
+
+$\begin{bmatrix}
+    P_0 & P_1 & P_2 & P_3 
+\end{bmatrix}$
+
+Now, multiply each of the $P$ values by their respective point in each row of the $C$ matrix.
+
+
+$\begin{bmatrix}
+   1*P_0 & 4*P_1 & 1*P_2 & 0*P_3 \\
+   -3*P_0 & 0*P_1 & 3*P_2  & 0*P_3 \\
+   3*P_0 & -6*P_1 & 3*P_2 & 0*P_3 \\
+   -1*P_0 & 3*P_1 & -3*P_2 & 1*P_3 \\
+\end{bmatrix}$
+
+
+Then, we write the $T$ matrix like this:
+$\begin{bmatrix}
+    1\\
+    t\\
+    t^2 \\
+    t^3 \\
+\end{bmatrix}$
+
+And finally, multiply the inside values by the corresponding rows, and add the inside of the matrix togehter,
+resulting in the final polynomial coefficient form:
+
+$f(t)=$
+
+$(P_0 + 4P_1 + P_2)$        $+$
+
+$t(-3P_0 + 3P_2)$       $+$
+
+$t^2(3P_0 - 6P_1 + 3P_2 )$        $+$
+
+$t^3(-P_0 + 3P_1 + -3P_2 + P_3)$
+
